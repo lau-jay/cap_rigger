@@ -34,8 +34,7 @@ async def init_db_pool(loop):
         db=DBCONFIG['db'] or 'test')
 
 
-def init_app(pool):
-    settings = {}
+def init_app(pool, **settings):
     app = App(pool, **settings)
     return app
 
@@ -46,7 +45,7 @@ def main():
         "template_path": os.path.join(os.path.dirname(__file__), "templates"),
     }
     loop = IOLoop.current()
-    pool = loop.run_until_complete(init_db_pool(loop=loop))
+    pool = loop.run_sync(init_db_pool(loop=loop))
     app = init_app(
         pool=pool, handlers=[], debug=APPCONFIG['debug'], **settings)
 
